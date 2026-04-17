@@ -1,9 +1,10 @@
+import { IUser } from "@/lib/interface/User.interface";
 import { User } from "firebase/auth";
 import { create } from "zustand";
 
 interface AuthState {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: IUser | null;
+  setUser: (user: IUser | null) => void;
   logout: () => void;
 }
 

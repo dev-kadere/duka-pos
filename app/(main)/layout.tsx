@@ -2,6 +2,7 @@
 
 import NavBar from "@/components/layout/NavBar";
 import useAuth from "@/hooks/useAuth";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect } from "react";
 
@@ -27,18 +28,33 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       {/* Sidebar */}
       <aside className="w-64 bg-gray-800 text-white flex flex-col">
         <div className="p-6 text-xl font-bold border-b border-gray-700">
-          Dashboard
+          DUKA POS
         </div>
         <nav className="flex-1 p-4 space-y-2">
-          <button className="w-full text-left hover:bg-gray-700 p-2 rounded">
-            Home
-          </button>
-          <button className="w-full text-left hover:bg-gray-700 p-2 rounded">
-            Profile
-          </button>
-          <button className="w-full text-left hover:bg-gray-700 p-2 rounded">
-            Settings
-          </button>
+          <Link
+            href="/dashboard"
+            className="w-full text-left hover:bg-gray-700 p-2 rounded block"
+          >
+            <button className="w-full text-left hover:bg-gray-700 p-2 rounded">
+              Dashboard
+            </button>
+          </Link>
+          <Link
+            href="/users"
+            className="w-full text-left hover:bg-gray-700 p-2 rounded block"
+          >
+            <button className="w-full text-left hover:bg-gray-700 p-2 rounded">
+              Users
+            </button>
+          </Link>
+          <Link
+            href="/transactions"
+            className="w-full text-left hover:bg-gray-700 p-2 rounded block"
+          >
+            <button className="w-full text-left hover:bg-gray-700 p-2 rounded">
+              Transactions
+            </button>
+          </Link>
         </nav>
       </aside>
 

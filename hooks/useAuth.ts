@@ -43,5 +43,27 @@ export default function useAuth() {
     toast.success("Logged out successfully");
   };
 
-  return { user, loading, handleLogOut };
+  const getUserDetails = async (accessToken: string) => {
+    try {
+      const responce = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/getUserDetails`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      if (!responce.ok) {
+        throw new Error("Failed to fetch user details");
+      }
+      console.log("User details response:", responce);
+      return await responce.json();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return { user, loading, handleLogOut, getUserDetails };
 }

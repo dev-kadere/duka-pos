@@ -1,5 +1,12 @@
-import Image from "next/image";
+"use client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
-  return <h1>Welcome to POS Duka</h1>;
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/login");
+  }, [router]);
+  return null;
 }

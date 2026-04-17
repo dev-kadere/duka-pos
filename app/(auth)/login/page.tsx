@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useAuth from "@/hooks/useAuth";
 import { auth } from "@/lib/firebase";
+import getFirebaseErrorMessage from "@/lib/firebaseErrorHelper";
+import { IUser } from "@/lib/interface/User.interface";
 import { useAuthStore } from "@/store/auth.store";
 import {
   GoogleAuthProvider,
@@ -23,8 +25,7 @@ const page = () => {
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const user = useAuth();
-  console.log(user.user);
+  const { user, getUserDetails } = useAuth();
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -64,12 +65,20 @@ const page = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
-      setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
+      const credential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      const token = await credential.user.getIdToken();
+      const user = await getUserDetails(token);
+      useAuthStore.getState().setUser(user);
       router.push("/dashboard");
     } catch (error: any) {
-      setError(error.message);
+      setError(getFirebaseErrorMessage(error.code));
     } finally {
       setLoading(false);
     }
@@ -80,6 +89,9 @@ const page = () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
+      const token = await auth.currentUser?.getIdToken();
+      const user = await getUserDetails(token!);
+      useAuthStore.getState().setUser(user);
       router.push("/dashboard");
     } catch (error: any) {
       setError(error.message);
